@@ -2,7 +2,7 @@ import { Context, Hono } from "npm:hono";
 import { cors } from "npm:hono/cors";
 import { MongoClient } from "npm:mongodb";
 
-const connectionString = Deno.env.get("DENO_MONGO_CONNECTION")!;
+const connectionString = Deno.env.get("MONGO_CONNECTION")!;
 
 // Connect to MongoDB
 const client = new MongoClient(connectionString);
