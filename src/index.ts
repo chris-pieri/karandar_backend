@@ -4,9 +4,13 @@ import { MongoClient } from "npm:mongodb";
 
 const connectionString = Deno.env.get("MONGO_CONNECTION")!;
 
+console.log("connectionString", connectionString);
+
 // Connect to MongoDB
 const client = new MongoClient(connectionString);
 const db = client.db("karandar");
+
+console.log("db", db);
 
 const app = new Hono();
 
