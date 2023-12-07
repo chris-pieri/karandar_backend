@@ -10,7 +10,8 @@ console.log("connectionString", connectionString);
 const client = new MongoClient(connectionString);
 const db = client.db("karandar");
 
-console.log("db", db);
+await client.db("admin").command({ ping: 1 });
+console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
 const app = new Hono();
 
