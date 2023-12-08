@@ -1,17 +1,12 @@
 import { Context, Hono } from "npm:hono";
 import { cors } from "npm:hono/cors";
-import { MongoClient } from "npm:mongodb";
+import { MongoClient, ObjectId } from "npm:mongodb";
 
 const connectionString = Deno.env.get("MONGO_CONNECTION")!;
-
-console.log("connectionString", connectionString);
 
 // Connect to MongoDB
 const client = new MongoClient(connectionString);
 const db = client.db("karandar");
-
-await client.db("admin").command({ ping: 1 });
-console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
 const app = new Hono();
 
@@ -43,10 +38,26 @@ app.get("/dates", async (c: Context) => {
 
 app.post("/date", async (c: Context) => {
   const body = await c.req.json();
-  console.log("body", body);
   const dates = db.collection("dates");
 
   const date = await dates.insertOne(body);
+  return c.json({ date });
+});
+
+app.put("/date/:id", async (c: Context) => {
+  const id = c.req.param("id");
+  const body = await c.req.json();
+  const dates = db.collection("dates");
+
+  const date = await dates.replaceOne({ _id: new ObjectId(id) }, body);
+  return c.json({ date });
+});
+
+app.delete("/date/:id", async (c: Context) => {
+  const id = c.req.param("id");
+  const dates = db.collection("dates");
+
+  const date = await dates.deleteOne({ _id: new ObjectId(id) });
   return c.json({ date });
 });
 
